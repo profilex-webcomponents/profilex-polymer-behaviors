@@ -1,0 +1,103 @@
+<script>
+    ApiBehaviors = {
+        properties: {
+            baseUrl: String,
+            xApiToken: String,
+            bearerAccessToken: String
+        },
+        getXApiToken() {
+            return this.xApiToken || sessionStorage.getItem("xApiToken") || null;
+        },
+        getBearerAccessToken() {
+            return this.bearerAccessToken || sessionStorage.getItem("bearerAccessToken") || null;
+        },
+        setXApiToken(xApiToken) {
+            this.xApiToken = xApiToken;
+        },
+        setBearerAccessToken(accessToken) {
+            this.bearerAccessToken = accessToken;
+        },
+        create(path, data) {
+            return new Promise(function(resolve, reject) {
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', this.baseUrl + path, true);
+                xhr.onreadystatechange = handler;
+                xhr.responseType = 'json';
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                var xApiToken = this.getXApiToken();
+                var accessToken = this.getBearerAccessToken();
+                if (xApiToken) {
+                    xhr.setRequestHeader('xapi-token', xApiToken);
+                } else if (accessToken) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
+                }
+                xhr.send(data);
+
+                function handler() {
+                    if (this.readyState === this.DONE) {
+                        if (this.status === 201) {
+                            resolve(this.response);
+                        } else {
+                            reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
+                        }
+                    }
+                };
+            });
+        },
+        patch(path, data) {
+            return new Promise(function(resolve, reject) {
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', this.baseUrl + path, false);
+                xhr.onreadystatechange = handler;
+                xhr.responseType = 'json';
+                xhr.setRequestHeader('Accept', 'application/json');
+                var xApiToken = this.getXApiToken();
+                var accessToken = this.getBearerAccessToken();
+                if (xApiToken) {
+                    xhr.setRequestHeader('xapi-token', xApiToken);
+                } else if (accessToken) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
+                }
+                xhr.send(data);
+
+                function handler() {
+                    if (this.readyState === this.DONE) {
+                        if (this.status === 201) {
+                            resolve(this.response);
+                        } else {
+                            reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
+                        }
+                    }
+                };
+            });
+        },
+        get(path, queryString) {
+            return new Promise(function(resolve, reject) {
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', this.baseUrl + path + ((queryString) ? "?" + queryString : ''));
+                xhr.onreadystatechange = handler;
+                xhr.responseType = 'json';
+                xhr.setRequestHeader('Accept', 'application/json');
+                var xApiToken = this.getXApiToken();
+                var accessToken = this.getBearerAccessToken();
+                if (xApiToken) {
+                    xhr.setRequestHeader('xapi-token', xApiToken);
+                } else if (accessToken) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
+                }
+                xhr.send();
+
+                function handler() {
+                    if (this.readyState === this.DONE) {
+                        if (this.status === 200) {
+                            resolve(this.response);
+                        } else {
+                            reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
+                        }
+                    }
+                };
+            });
+        }
+    };
+</script>

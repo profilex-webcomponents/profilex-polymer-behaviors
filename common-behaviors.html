@@ -1,0 +1,47 @@
+<script>
+    CommonBehaviors = {
+        properties: {
+            currentUser: {
+                type: Object,
+                value: {},
+                notify: true,
+                observer: '_onCurrentUserChanged'
+            },
+            appConfig: Object,
+            accessToken: String
+        },
+        _onCurrentUserChanged() {
+            this.fire("user-logged-in", this.currentUser);
+        },
+        /*
+         * App configuration that are load from window.appConfig, which are present in external file
+         */
+        setAppConfig(appConfig) {
+            this.appConfig = appConfig;
+        },
+        getAppConfig() {
+            return this.appConfig || window.appConfig;
+        },
+        /*
+         * Set and get current user of the application
+         *
+         */
+        setCurrentUser(currentUser) {
+            this.currentUser = currentUser;
+        },
+        getCurrentUser() {
+            return currentUser;
+        },
+        /**
+         * Set and get tpaas access token
+         */
+        setAccessToken(accessToken) {
+            sessionStorage.setItem("accessToken", accessToken)
+            this.accesToken = accessToken;
+        },
+        getAccessToken() {
+            return this.accessToken || sessionStorage.getItem("accessToken");
+        }
+
+    };
+</script>

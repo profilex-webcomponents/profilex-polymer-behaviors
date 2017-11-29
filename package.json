@@ -1,0 +1,8 @@
+{
+  "name": "profilex-polymer-behaviors",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/profilex-webcomponents/profilex-polymer-behaviors.git",
+  "author": "<balasuresh_varadharajan@trimble.com>",
+  "license": "MIT"
+}
